@@ -20,6 +20,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
+    overflow: hidden;
 }
 
 /* Main container */
@@ -38,7 +39,7 @@ h1 {
 /* Button row */
 .button-group {
     display: flex;
-    gap: 5cm; /* 5cm spacing between buttons */
+    gap: 80px;
 }
 
 /* Buttons */
@@ -77,6 +78,7 @@ button {
     opacity: 0;
     visibility: hidden;
     transition: opacity 1s ease;
+    overflow: hidden;
 }
 
 .reveal.active {
@@ -99,6 +101,25 @@ button {
     padding: 0 20px;
 }
 
+/* Floating hearts */
+.heart {
+    position: absolute;
+    color: red;
+    font-size: 24px;
+    animation: floatUp 4s linear forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-800px) scale(1.5);
+        opacity: 0;
+    }
+}
+
 @keyframes pop {
     from { transform: scale(0.7); }
     to { transform: scale(1); }
@@ -118,7 +139,7 @@ button {
 </div>
 
 <div class="reveal" id="reveal">
-    <img src="valentine.jpg" alt="5 Years Together">
+    <img src="valentine.jpeg" alt="5 Years Together">
     <h2>Congratulations on being my Valentine for the last 5 years ❤️</h2>
 </div>
 
@@ -126,12 +147,27 @@ button {
 const yesBtn = document.getElementById("yesBtn");
 const reveal = document.getElementById("reveal");
 
-/* YES works */
 yesBtn.addEventListener("click", () => {
     reveal.classList.add("active");
-});
 
-/* NO does absolutely nothing */
+    // Create floating hearts
+    for (let i = 0; i < 40; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "❤️";
+
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.top = window.innerHeight + "px";
+        heart.style.fontSize = (Math.random() * 20 + 20) + "px";
+        heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+
+        reveal.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 5000);
+    }
+});
 </script>
 
 </body>
