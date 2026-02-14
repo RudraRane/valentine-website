@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine? ❤️</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #ff758c, #ff7eb3);
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .container {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(15px);
+        padding: 50px;
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+        position: relative;
+        z-index: 10;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        color: white;
+        margin-bottom: 40px;
+    }
+
+    button {
+        padding: 14px 28px;
+        font-size: 18px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        margin: 10px;
+        transition: 0.3s ease;
+        position: absolute;
+    }
+
+    .yes-btn {
+        background: #ff2e63;
+        color: white;
+        left: 40%;
+        transform: translateX(-50%);
+    }
+
+    .yes-btn:hover {
+        transform: translateX(-50%) scale(1.1);
+    }
+
+    .no-btn {
+        background: white;
+        color: #ff2e63;
+        left: 60%;
+        transform: translateX(-50%);
+    }
+
+    .final-message {
+        display: none;
+        font-size: 2rem;
+        color: white;
+        margin-top: 20px;
+        animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    .heart {
+        position: absolute;
+        font-size: 24px;
+        animation: float 5s linear infinite;
+        color: white;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(100vh); opacity: 1; }
+        100% { transform: translateY(-10vh); opacity: 0; }
+    }
+
+    .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+        0% { transform: translateY(-10vh) rotate(0deg); }
+        100% { transform: translateY(100vh) rotate(720deg); }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Will You Be My Valentine? 💖</h1>
+    <button class="yes-btn" id="yesBtn">Yes 💘</button>
+    <button class="no-btn" id="noBtn">No 🙈</button>
+    <div class="final-message" id="finalMessage">
+        💕 Congratulations on being my Valentine for the last 5 years! 💕<br>
+        You’re stuck with me forever 😘
+    </div>
+</div>
+
+<script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const finalMessage = document.getElementById("finalMessage");
+    let gameActive = true;
+
+    function moveNoButton() {
+        if (!gameActive) return;
+
+        const padding = 100;
+        const maxX = window.innerWidth - padding;
+        const maxY = window.innerHeight - padding;
+
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+
+        noBtn.style.left = randomX + "px";
+        noBtn.style.top = randomY + "px";
+    }
+
+    // Escape on hover
+    noBtn.addEventListener("mouseenter", moveNoButton);
+
+    // Escape if cursor gets close
+    document.addEventListener("mousemove", (e) => {
+        if (!gameActive) return;
+
+        const rect = noBtn.getBoundingClientRect();
+        const distance = Math.hypot(
+            e.clientX - (rect.left + rect.width / 2),
+            e.clientY - (rect.top + rect.height / 2)
+        );
+
+        if (distance < 120) {
+            moveNoButton();
+        }
+    });
+
+    yesBtn.addEventListener("click", () => {
+        gameActive = false;
+
+        yesBtn.style.display = "none";
+        noBtn.style.display = "none";
+
+        finalMessage.style.display = "block";
+
+        launchHearts();
+        launchConfetti();
+    });
+
+    function launchHearts() {
+        for (let i = 0; i < 30; i++) {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random() * window.innerWidth + "px";
+            heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 5000);
+        }
+    }
+
+    function launchConfetti() {
+        for (let i = 0; i < 80; i++) {
+            const confetti = document.createElement("div");
+            confetti.classList.add("confetti");
+            confetti.style.left = Math.random() * window.innerWidth + "px";
+            confetti.style.backgroundColor =
+                `hsl(${Math.random() * 360}, 100%, 60%)`;
+            document.body.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 3000);
+        }
+    }
+</script>
+
+</body>
+</html>
